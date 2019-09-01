@@ -5,37 +5,36 @@
 - NumPy
 
 ## PANDAS USEFUL DATA STRUCTURES:
-	- Series
-	- Data Frame
+- Series
+- Data Frame
 
 ## TECHNIQUES
-  - Boolean masking: create a boolean matrix over your data
+- Boolean masking: create a boolean matrix over your data
 
-MISCELLANEOUS
+## MISCELLANEOUS
+- Timer:
+	timeit
 
-  *Timer:
-    - timeit
-
-  *Merge datasets:
+- Merge datasets:
     - Use merge() function
     - Can use specific columns (as in SQL) or both table indices
 
-  *Pandas Idioms (make your code "pandorable"):
+- Pandas Idioms (make your code "pandorable"):
     - Index chaining (to be avoided)
     - Method chaining: include all code into a bracket to improve readability
     - Apply function to run the same function on all rows
 
-  *GroupBy:
+- GroupBy:
     -  can use Agg() function to compute variables on the aggregated object
     - Dispatching: generate additional key to split data to be treated by different jobs
   
-  *Merge: 
-    - Used to join two dataframes. For example: m= pd.merge(top15,energy, how='inner', left_on='Country', right_on = 'Country' )
+- Merge:
+- Used to join two dataframes. For example: 
+    m= pd.merge(top15,energy, how='inner', left_on='Country', right_on = 'Country' )
 
-Select
-# select specific columns with a list
-# select columns foo, bar and dat
-df.loc[:, ['foo','bar','dat']]
+- Select
+	df.loc[:, ['foo','bar','dat']] # select columns foo, bar and dat
+
 
 
 Apply:
