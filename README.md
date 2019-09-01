@@ -16,8 +16,8 @@
 	timeit
 
 - Merge datasets:
-    - Use merge() function
-    - Can use specific columns (as in SQL) or both table indices
+-- Use merge() function
+-- Can use specific columns (as in SQL) or both table indices
 
 - Pandas Idioms (make your code "pandorable"):
     - Index chaining (to be avoided)
