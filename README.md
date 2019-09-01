@@ -1,14 +1,14 @@
-## USEFUL LIBRARIES
+### USEFUL LIBRARIES
 - Pandas: opensource framework to manipulate data
 - Scikit
 - Matplotlib
 - NumPy
 
-PANDAS USEFUL DATA STRUCTURES:
+## PANDAS USEFUL DATA STRUCTURES:
 	- Series
-	- Data frames
+	- Data Frame
 
-TECHNIQUES
+## TECHNIQUES
   - Boolean masking: create a boolean matrix over your data
 
 MISCELLANEOUS
