@@ -1,8 +1,8 @@
 ## USEFUL LIBRARIES
-#Pandas: opensource framework to manipulate data
-#Scikit
-#Matplotlib
-#NumPy
+-Pandas: opensource framework to manipulate data
+-Scikit
+-Matplotlib
+-NumPy
 
 PANDAS USEFUL DATA STRUCTURES:
 	- Series
