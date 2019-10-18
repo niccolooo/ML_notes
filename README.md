@@ -11,7 +11,22 @@
 ## TECHNIQUES
 - Boolean masking: create a boolean matrix over your data
 
+- Normalization:
+		from sklearn.preprocessing import MinMaxScaler
+		scaler = MinMaxScaler()
+		X_train_scaled = scaler.fit_transform(X_train)
+		X_test_scaled = scaler.transform(X_test)
+		
+- Cross validation
+-- Run multiple tran-test splits 
+-- K-fold CV: split the dataset into K folds and run K trainings modifying the test each time.
+-- Stratified CV:
+-- Leave-one-out CV: each fold has one single element
+
 ## MISCELLANEOUS
+- Train/Test Split:
+	X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
 - Timer:
 	timeit
 
@@ -39,7 +54,6 @@
 	def money_to_float(money_str):
     	return float(money_str.replace("$","").replace(",",""))
 	df['SAL-RATE'].apply(money_to_float)
-
 
 - Scales:
 -- Ratio
@@ -69,6 +83,8 @@
 - Expected value: mean value if an infinite number of samples were drawn from the distribution
 
 - Skewness: measurement of the asymmetry of a distribution
+
+- R^2 = evaluation metric AKA "coefficient of determination"
 
 
 ## Plotting
@@ -107,5 +123,36 @@
 	plt.show()
 
 ## Algorithms
-- KNN
+- KNN:
+-- Parameters: 
+1. Distance metric
+2. K
+3. Optional weighting function
+4. Aggregation method
 
+- Least Squares (LS) Regression: y = w*x + b
+-- Ordinary LS Regression: w and b found by mininiming the mean square error
+-- Ridge Reg.: w and b found by minimising the mean square error with regularization (squared). It requires feature normalization (!!!)
+-- Lasso Reg.: w and b found by minimising the mean square error with regularization (abs value). It requires feature normalization (!!!)
+-- LS Polynomial Reg: add multiplicative combinations of the features and apply regression. 
+	from sklearn.linear_model import LinearRegression
+	from sklearn.preprocessing import PolynomialFeatures
+	poly = PolynomialFeatures(degree=2)
+	X_F1_poly = poly.fit_transform(X_F1)
+	X_train, X_test, y_train, y_test = train_test_split(X_F1_poly, y_F1,random_state = 0)
+	linreg = LinearRegression().fit(X_train, y_train)
+
+- Linear Regression: 
+-- Used for binary classification
+-- Computes a real value output based on a linear compbination of the input x. y = logistic ( w*x + bar)
+-- logistic function is a non-linear s-shape function. 
+
+- Support Vector Machines
+-- Classifier margin: maximum width the the decision boundary can be increased before hitting a data point
+--  SVM is the linear classifier with maximum classifier margin
+
+- Kernelized SVM
+-- kernel = similary measure between data points
+
+- Decision Trees
+-- 
