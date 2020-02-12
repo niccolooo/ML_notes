@@ -1,4 +1,4 @@
-### USEFUL LIBRARIES
+## USEFUL LIBRARIES
 - Pandas: opensource framework to manipulate data
 - Scikit
 - Matplotlib
@@ -17,12 +17,26 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 
 - **[Pandas] DataFrame**: TODO DESCRIPTION
-	- Select all cases where the first name is not missing and nationality is USA ``` df[df['first_name'].notnull() & (df['nationality'] == "USA")] ```   
+	- Select all cases where the first name is not missing and nationality is USA ``` df[df['first_name'].notnull() & (df['nationality'] == "USA")] ```  
+	- ```df.loc[:, ['foo','bar','dat']]``` # select columns foo, bar and dat
 	- Create variable with TRUE if age is greater than 50 ```elderly = df['age'] > 50``` 
 	- df[df.City.str.contains('ville',case=False)] # select with condition on string
 	- ```data = data.drop(['compliance','compliance_detail'], axis = 1)``` #drop columns
 	- ```X_train_reduced = X_train_reduced.apply(pd.to_numeric, errors = 'coerce')``` # convert all columns of DataFrame to numeric
-
+	- ```data = full_data.loc[:, ["CLASS", "COUNTY", "geometry"]].copy()``` # select columns with copy
+	- ```wild_lands = data.loc[data.CLASS.isin(['WILD FOREST', 'WILDERNESS'])].copy()``` # select rows if column value equals a value in a list
+	- ```data.CLASS.value_counts()``` # get enums count within a column
+	- Convert column from string to datetime:
+		```qd.columns = pd.to_datetime(qd.columns)```  
+	- Sort dataframe by column:
+		``````result = df.sort(['A', 'B'], ascending=[1, 0])```  
+	- Rename single columns:
+		```data.rename(columns={'gdp':'log(gdp)'}, inplace=True)```  
+	- Set column to true if other column is NaN:
+		```df.loc[df.Col1.isnull(), 'newCol'] = 1```  
+	- Dataframe dimensions:
+		```data.shape'```  
+		
  - **[Pandas] List**: TODO DESCRIPTION
 	- ```my_list = [1, 2, 3]``` 
 	- ```my_list = [1, "Hello", 3.4]``` # list with mixed data types
@@ -46,27 +60,17 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 ## MISCELLANEOUS
 
-- get type
-type(my_data)
+- get type: ```type(my_data)```
 
-- select columns with copy
-data = full_data.loc[:, ["CLASS", "COUNTY", "geometry"]].copy()
-
-- select rows if column value equals a value in a list
-wild_lands = data.loc[data.CLASS.isin(['WILD FOREST', 'WILDERNESS'])].copy()
-
-- get enums count within a column
-data.CLASS.value_counts()
-
-- Train/Test Split:
-	X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+- Train/Test Split: ```X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)```
 
 - Timer:
 	timeit
 
 - Merge datasets:
--- Use merge() function
--- Can use specific columns (as in SQL) or both table indices
+	- Use merge() function
+	- Can use specific columns (as in SQL) or both table indices
+	- ```m= pd.merge(top15,energy, how='inner', left_on='Country', right_on = 'Country' )```
 
 - Pandas Idioms (make your code "pandorable"):
     - Index chaining (to be avoided)
@@ -77,100 +81,78 @@ data.CLASS.value_counts()
 -- can use Agg() function to compute variables on the aggregated object
 -- Dispatching: generate additional key to split data to be treated by different jobs
   
-- Merge:
--- Used to join two dataframes. For example: 
-	m= pd.merge(top15,energy, how='inner', left_on='Country', right_on = 'Country' )
-
--- Select
-	df.loc[:, ['foo','bar','dat']] # select columns foo, bar and dat
-
 -Apply:
-	def money_to_float(money_str):
-    	return float(money_str.replace("$","").replace(",",""))
-	df['SAL-RATE'].apply(money_to_float)
+	```def money_to_float(money_str):```  
+    	```return float(money_str.replace("$","").replace(",",""))```  
+	```df['SAL-RATE'].apply(money_to_float)```
 
 - Scales:
--- Ratio
--- Interval
--- Ordinal
--- Nominal
+	- Ratio
+	- Interval
+	- Ordinal
+	- Nominal
 
-- Interpolation
-from scipy.interpolate import interp1d
-f1 = interp1d(precision, recall, kind='nearest')
-value = f1(newx)
+- Interpolation:
+	```from scipy.interpolate import interp1d```
+	```f1 = interp1d(precision, recall, kind='nearest')```
+	```value = f1(newx)```
 
 - Hypothesis testing:
--- Hp = a statement we can test
--- Critical Value (alpha) = a threshold one is willing to accept
+	- Hp = a statement we can test
+	- Critical Value (alpha) = a threshold one is willing to accept
+
+## Model Evaluation and Selection for Supervised Algorithms
+- Generic golden rule: 
+	1. train set -> build model
+	2. validation set (among train set) -> select model
+	3. test set -> final evaluation
+- **Accuracy** = *correctly_labelled/sample_size* . This is not always a good metric. ```Acc = (TP + TN)/(TP + FP + TN + FN)```
+- Confusion matrix [TN FP; FN TP] ```from sklearn.metrics import confusion_matrix
+- **True Positive Rate (AKA Recall, Sensitivity, Probability of detection)**= TP/{TP + FN}
+- **Precision** = TP / {TP + FP}
+- **False Positive Rate (aka Specificity)** = FP / {TN + FP}
+- Recall oriented application: tumor detection, 
+- Precision oriented application: document classification, search engine ranking
+- **FI-score** = 2 * precision * recall / {precision + recall} = 2 * TP / {2 * TP + FN + FP}
+- How to establish the decision threshold? Recall vs Precision tradeoff
+- **ROC curve**: True Positive Rate vs False Positive Rate
+	```import sklearn.metrics as metrics```  
+	```# calculate the fpr and tpr for all thresholds of the classification```  
+	```probs = model.predict_proba(X_test)```  
+	```preds = probs[:,1]```  
+	```fpr, tpr, threshold = metrics.roc_curve(y_test, preds)```  
+	```roc_auc = metrics.auc(fpr, tpr)```  
+- **Dummy classifier** can be used for sanity check. One can use the following streategies: most_frequent, stratified, uniform, constant
+```# Negative class (0) is most frequent```  
+```dummy_majority = DummyClassifier(strategy = 'most_frequent').fit(X_train, y_train)```  
+```y_majority_predicted = dummy_majority.predict(X_test)```  
+```confusion = confusion_matrix(y_test, y_majority_predicted)```  
+```# method I: plt
+```import matplotlib.pyplot as plt```  
+```plt.title('Receiver Operating Characteristic')```  
+```plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)```  
+```plt.legend(loc = 'lower right')```  
+```plt.plot([0, 1], [0, 1],'r--')```  
+```plt.xlim([0, 1])```  
+```plt.ylim([0, 1])```  
+```plt.ylabel('True Positive Rate')```  
+```plt.xlabel('False Positive Rate')```  
+```plt.show()```
 
 
-
-- Model Evaluation and Selection for Supervised Algorithms
--- Generic golden rule: 
-1. train set -> build model
-2. validation set (among train set) -> select model
-3. test set -> final evaluation
--- Accuracy = correctly_labelled/sample_size . This is not always a good metric. Acc = (TP + TN)/(TP + FP + TN + FN)
--- Dummy classifier can be used for sanity check. One can use the following streategies: most_frequent, stratified, uniform, constant
--- Confusion matrix [TN FP; FN TP]
-from sklearn.metrics import confusion_matrix
-# Negative class (0) is most frequent
-dummy_majority = DummyClassifier(strategy = 'most_frequent').fit(X_train, y_train)
-y_majority_predicted = dummy_majority.predict(X_test)
-confusion = confusion_matrix(y_test, y_majority_predicted)
--- True Positive Rate (AKA Recall, Sensitivity, Probability of detection)= TP/{TP + FN}
--- Precision = TP / {TP + FP}
--- False Positive Rate (aka Specificity) = FP / {TN + FP}
--- Recall oriented application: tumor detection, 
--- Precision oriented application: document classification, search engine ranking
--- FI-score = 2 * precision * recall / {precision + recall} = 2 * TP / {2 * TP + FN + FP}
--- How to establish the decision threshold? Recall vs Precision tradeoff
--- ROC curve: True Positive Rate vs False Positive Rate
-import sklearn.metrics as metrics
-# calculate the fpr and tpr for all thresholds of the classification
-probs = model.predict_proba(X_test)
-preds = probs[:,1]
-fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
-roc_auc = metrics.auc(fpr, tpr)
-
-# method I: plt
-import matplotlib.pyplot as plt
-plt.title('Receiver Operating Characteristic')
-plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
-plt.legend(loc = 'lower right')
-plt.plot([0, 1], [0, 1],'r--')
-plt.xlim([0, 1])
-plt.ylim([0, 1])
-plt.ylabel('True Positive Rate')
-plt.xlabel('False Positive Rate')
-plt.show()
-
-
--- Multi-class evaluation:
---- macro average: each class has the same weight
---- micro average: each instance has equal weight 
+- **Multi-class evaluation
+	- macro average: each class has the same weight
+	- micro average: each instance has equal weight 
  
-- Evaluation for Regression Algorithms
--- Dummy regressors can be used for sanity check. Mean, median, quantile, constant
--- Matrics: r2_score (good), mean_absolute_error, mean_squared_error, median_absolute_error
+- **Evaluation for Regression Algorithms
+	- Dummy regressors can be used for sanity check. Mean, median, quantile, constant
+	- Matrics: r2_score (good), mean_absolute_error, mean_squared_error, median_absolute_error
 
-## COLUMN MANIPULATION
-- Convert column from string to datetime:
-	qd.columns = pd.to_datetime(qd.columns)
-- Sort dataframe by column:
-	result = df.sort(['A', 'B'], ascending=[1, 0])
-- Rename single columns:
-	data.rename(columns={'gdp':'log(gdp)'}, inplace=True)
-- Set column to true if other column is NaN:
-	df.loc[df.Col1.isnull(), 'newCol'] = 1
-- Dataframe dimensions:
-	data.shape
 	
 ## DEFINITIONS:
-- Stochastic variable: variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.
+- **Stochastic variable**: *variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.*  
 
-- Expected value: mean value if an infinite number of samples were drawn from the distribution
+- Expected value: *mean value if an infinite number of samples were drawn from the distribution*
 
 - Skewness: measurement of the asymmetry of a distribution
 
