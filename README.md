@@ -1,4 +1,4 @@
-## DEFINITIONS:
+## DEFINITIONS
 - **Stochastic variable**: *variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.*  
 
 - **Expected value**: *mean value if an infinite number of samples were drawn from the distribution*
@@ -68,8 +68,6 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	```X_test_scaled = scaler.transform(X_test)```
 
 ## MISCELLANEOUS
-
-
 - Grid Search
 	```
 	dataset = load_digits()
@@ -126,7 +124,7 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	- Hp = a statement we can test
 	- Critical Value (alpha) = a threshold one is willing to accept
 
-## Model Evaluation and Selection for Supervised Algorithms
+## MODEL EVALUATION AND SELECTION (SUPERVISED)
 - Generic golden rule: 
 	1. train set -> build model
 	2. validation set (among train set) -> select model
@@ -153,9 +151,9 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	
 	```
 	# Negative class (0) is most frequent  
-	dummy_majority = DummyClassifier(strategy = 'most_frequent').fit(X_train, y_train)```  
-	y_majority_predicted = dummy_majority.predict(X_test)```  
-	confusion = confusion_matrix(y_test, y_majority_predicted)```  
+	dummy_majority = DummyClassifier(strategy = 'most_frequent').fit(X_train, y_train)
+	y_majority_predicted = dummy_majority.predict(X_test)
+	confusion = confusion_matrix(y_test, y_majority_predicted)
 	# method I: plt
 	import matplotlib.pyplot as plt  
 	plt.title('Receiver Operating Characteristic')  
@@ -176,15 +174,15 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	- Dummy regressors can be used for sanity check. Mean, median, quantile, constant
 	- Matrics: r2_score (good), mean_absolute_error, mean_squared_error, median_absolute_error
 
-# ALGORITHMS
-## KNN:
-- Parameters: 
+## ALGORITHMS
+### KNN:
+- Parameters
 	1. Distance metric
 	2. K
 	3. Optional weighting function
 	4. Aggregation method
 
-## Least Squares (LS) Regression: y = w*x + b
+### Least Squares (LS) Regression: y = w*x + b
 - Ordinary LS Regression: w and b found by mininiming the mean square error
 - Ridge Reg.: w and b found by minimising the mean square error with regularization (squared). It requires feature normalization (!!!)
 - Lasso Reg.: w and b found by minimising the mean square error with regularization (abs value). It requires feature normalization (!!!)
@@ -197,26 +195,27 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	X_train, X_test, y_train, y_test = train_test_split(X_F1_poly, y_F1,random_state = 0)
 	linreg = LinearRegression().fit(X_train, y_train)
 
-## Linear Regression: 
+### Linear Regression
 - Used for binary classification
 - Computes a real value output based on a linear compbination of the input x. y = logistic ( w*x + bar)
 - logistic function is a non-linear s-shape function. 
 
-## Decision Tree: TODO DESCRIPTION
+### Decision Tree TODO DESCRIPTION
 	```
 	from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
 	dt = DecisionTreeClassifier()
 	dt = dt.fit(X_train, y_train)
 	tree.plot_tree(clf.fit(iris.data, iris.target)) 
 
-## Naive Bayes Classification
+### Naive Bayes Classification
 - Assumes no correlation between features for instances of the same class
 - Gaussian [uses mean and std dev of features]
+	```
 	from sklearn.naive_bayes import GaussianNB
 	nbclf = GaussianNB().fit(X_train, y_train)
 	plot_class_regions_for_classifier(nbclf, X_train, y_train, X_test, y_test,'Gaussian Naive Bayes classifier: Dataset 2')
 
-## Random Forests: Ensemble method combining several decision trees.
+### Random Forests: Ensemble method combining several decision trees.
 - Steps: 
 	1. Bootstrapped randomized copies 
 	2. Randomized feature split
@@ -231,7 +230,7 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	clf = RandomForestClassifier(max_features = 8, random_state = 0)
 	clf.fit(X_train, y_train)
 
-## Gradient Boosted Decision Trees
+### Gradient Boosted Decision Trees
 - series of weak decision trees 
 - parameters: n_estimators = # of small decision trees to use in the ensemble, learning_rate = controls emphasis on fixing errors from the previous tree
 - often performs well off-the-shelf
@@ -240,7 +239,7 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	from sklearn.ensemble import GradientBoostingClassifier
 	clf = GradientBoostingClassifier().fit(X_train, y_train)
 
-## Support Vector Machines
+### Support Vector Machines
 - Linear binary classifier f(x) = sign (Wx + b)
 - Classifier margin: maximum width the the decision boundary can be increased before hitting a data point
 -  SVM is the linear classifier with maximum classifier margin
