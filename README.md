@@ -1,11 +1,18 @@
 ## DEFINITIONS
-- **Stochastic variable**: *variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.*  
 
-- **Expected value**: *mean value if an infinite number of samples were drawn from the distribution*
+- **Correlation**: *any statistical relationship, whether causal or not, between two random variables or bivariate data. In the broadest sense correlation is any statistical association, though it commonly refers to the degree to which a pair of variables are linearly related.*
 
-- **Skewness**: *measurement of the asymmetry of a distribution*
+- **Expected value**: *mean value if an infinite number of samples were drawn from the distribution*. 
 
 - **R^2** = evaluation metric AKA "coefficient of determination" TODO
+
+- **Skewness**: *measure of the asymmetry of the probability distribution of a real-valued random variable about its mean. The skewness value can be positive or negative, or undefined.*
+
+- **Stochastic variable**: *variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.*  
+
+- **Student T**: TODO
+
+- **ChiSq**: TODO
 
 ## USEFUL LIBRARIES
 - Pandas: opensource framework to manipulate data
@@ -55,6 +62,12 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	- ```a = np.array([2,3,4])```
 
 ## TECHNIQUES
+
+- **Feature selection**: 
+	1. Filter Method
+	2. Wrapper Method
+	3. Embedded Method
+
 - **Boolean masking**:  create a boolean matrix over your data
 
 - **Handle NaN**  
