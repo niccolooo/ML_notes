@@ -64,9 +64,45 @@ Labels need not be unique but must be a hashable type. The object supports both 
 ## TECHNIQUES
 
 - **Feature selection**: 
-	1. Filter Method
-	2. Wrapper Method
-	3. Embedded Method
+	1. **Filter Method**: filter and take only the subset of the relevant features.
+		```
+		from sklearn.datasets import load_boston
+		import pandas as pd
+		import numpy as np
+		import matplotlib
+		import matplotlib.pyplot as plt
+		import seaborn as sns
+		import statsmodels.api as sm
+		%matplotlib inline
+		from sklearn.model_selection import train_test_split
+		from sklearn.linear_model import LinearRegression
+		from sklearn.feature_selection import RFE
+		from sklearn.linear_model import RidgeCV, LassoCV, Ridge, Lasso
+		#Loading the dataset
+		x = load_boston()
+		df = pd.DataFrame(x.data, columns = x.feature_names)
+		df["MEDV"] = x.target
+		X = df.drop("MEDV",1)   #Feature Matrix
+		y = df["MEDV"]          #Target Variable
+		df.head()
+		#Using Pearson Correlation
+		plt.figure(figsize=(12,10))
+		cor = df.corr()
+		sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
+		plt.show()
+		#Correlation with output variable
+		cor_target = abs(cor["MEDV"])
+		#Selecting highly correlated features
+		relevant_features = cor_target[cor_target>0.5]
+		# Check correlation between selected features
+		print(df[["LSTAT","PTRATIO"]].corr())
+		print(df[["RM","LSTAT"]].corr())
+
+	2. **Wrapper Method**
+		- **Backward elimination**: As the name suggest, we feed all the possible features to the model at first. We check the performance of the model and then iteratively remove the worst performing features one by one till the overall performance of the model comes in acceptable range. The performance metric used here to evaluate feature performance is pvalue. If the pvalue is above 0.05 then we remove the feature, else we keep it.
+		- **RFE (Recursive Feature Elimination)**: The Recursive Feature Elimination (RFE) method works by recursively removing attributes and building a model on those attributes that remain. It uses accuracy metric to rank the feature according to their importance.
+
+	3. **Embedded Method**: Embedded methods are iterative in a sense that takes care of each iteration of the model training process and carefully extract those features which contribute the most to the training for a particular iteration. Regularization methods are the most commonly used embedded methods which penalize a feature given a coefficient threshold.
 
 - **Boolean masking**:  create a boolean matrix over your data
 
