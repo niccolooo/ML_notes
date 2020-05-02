@@ -35,6 +35,9 @@ Labels need not be unique but must be a hashable type. The object supports both 
 - **[Pandas] DataFrame**: TODO DESCRIPTION
 	- Select all cases where the first name is not missing and nationality is USA ``` df[df['first_name'].notnull() & (df['nationality'] == "USA")] ```  
 	- ```df.loc[:, ['foo','bar','dat']]``` # select columns foo, bar and dat
+	- select first X and last Y columns 
+	```df.iloc[:, list(range(9)) + [-1]]
+
 	- Create variable with TRUE if age is greater than 50 ```elderly = df['age'] > 50``` 
 	- df[df.City.str.contains('ville',case=False)] # select with condition on string
 	- ```data = data.drop(['compliance','compliance_detail'], axis = 1)``` #drop columns
@@ -52,6 +55,15 @@ Labels need not be unique but must be a hashable type. The object supports both 
 		```df.loc[df.Col1.isnull(), 'newCol'] = 1```  
 	- Dataframe dimensions:
 		```data.shape'```  
+	- Select all null 
+		df[df['Col2'].isnull()]
+	- Group by multiple columns
+		worlddata.columns = ['Confirmed','Fatalities']
+		worlddata = worlddata.reset_index()
+		worlddata = worlddata.groupby(['Date', 'Country_Region']).agg({'ConfirmedCases': ['sum'],'Fatalities': ['sum']})
+	- Moving average
+	    d['rolling_fatalities'] = d.Fatalities.rolling(window=3).mean()
+
 		
  - **[Pandas] List**: TODO DESCRIPTION
 	- ```my_list = [1, 2, 3]``` 
@@ -158,7 +170,10 @@ Labels need not be unique but must be a hashable type. The object supports both 
 - GroupBy:
 -- can use Agg() function to compute variables on the aggregated object
 -- Dispatching: generate additional key to split data to be treated by different jobs
-  
+	df.groupby(['Animal']).mean()
+	# or
+	df.groupby(['col1','col2']).mean()
+	
 -Apply:
 	```def money_to_float(money_str):```  
     	```return float(money_str.replace("$","").replace(",",""))```  
@@ -340,3 +355,61 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	ax.set_ylabel('height')  
 	ax.set_zlabel('color_score')  
 	plt.show()  
+
+- roatated labels on axis
+	import matplotlib
+	import matplotlib.pyplot as plt
+	fig, ax = plt.subplots()
+	ax.set_xticklabels(labels,rotation=45)
+
+- Plot several lines 
+	from datetime import datetime
+	import matplotlib
+	import matplotlib.pyplot as plt
+
+	provinces = latest_prov.province[:(int)(n_provinces_to_plot/2)]
+	fig2, ax2 = plt.subplots()
+
+	for p in provinces:
+		
+		provdata = prov[prov.province==p]
+		plt.plot(provdata.date, provdata.total_cases, '-xb', label=p, c=np.random.rand(3,)) 
+		plt.legend(loc = 'upper left')
+		plt.plot([0, 1], [0, 1],'r--')  
+		#plt.ylabel('True Positive Rate')
+		#plt.xlabel('False Positive Rate')
+		ax2.set_xticklabels(list(provdata.date),rotation=70)
+
+	plt.show()
+	
+- Make room for x axis
+	plt.tight_layout()
+	
+- Format plot in matplotlib
+	fmt = '[marker][line][color]'
+	
+- Set ticks
+	major_ticks = np.arange(0, 101, 20)
+	minor_ticks = np.arange(0, 101, 5)
+
+	ax.set_xticks(major_ticks)
+	ax.set_xticks(minor_ticks, minor=True)
+	ax.set_yticks(major_ticks)
+	ax.set_yticks(minor_ticks, minor=True)
+	
+- Rotate axis values
+	plt.xticks(rotation=90)
+	
+## FILTERING
+- Wavelet filter
+- Average smooting
+	def average_smoothing(signal, kernel_size=3, stride=1):
+		sample = []
+		start = 0
+		end = kernel_size
+		while end <= len(signal):
+			start = start + stride
+			end = end + stride
+			sample.extend(np.ones(end - start)*np.mean(signal[start:end]))
+		return np.array(sample)
+
