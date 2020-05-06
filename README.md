@@ -195,6 +195,13 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	- Hp = a statement we can test
 	- Critical Value (alpha) = a threshold one is willing to accept
 
+- Cross validation
+	```
+	# Fit the model and score on testing data
+	from sklearn.model_selection import cross_val_score
+	percent_score = cross_val_score(model, X, y, cv=5)
+	print(np.mean(percent_score))
+
 ## MODEL EVALUATION AND SELECTION (SUPERVISED)
 - Generic golden rule: 
 	1. train set -> build model
@@ -243,7 +250,12 @@ Labels need not be unique but must be a hashable type. The object supports both 
  
 - **Evaluation for Regression Algorithms
 	- Dummy regressors can be used for sanity check. Mean, median, quantile, constant
-	- Matrics: r2_score (good), mean_absolute_error, mean_squared_error, median_absolute_error
+	- Matrics: 
+		r2_score= 1 - error/variance [quantifies the error of the model prediction vs the error of a dummy predictor], 
+		mean_absolute_error, 
+		mean_squared_error, 
+		median_absolute_error
+	
 
 ## ALGORITHMS
 ### KNN:
@@ -399,10 +411,15 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	
 - Rotate axis values
 	plt.xticks(rotation=90)
-	
+
+- Fill between:
+	```
+	ax.fill_between(times_spec, centroids - bandwidths / 2, centroids + bandwidths / 2, alpha=.5)
+
 ## FILTERING
 - Wavelet filter
-- Average smooting
+- Average smooting AKA as Rolling Mean
+	```
 	def average_smoothing(signal, kernel_size=3, stride=1):
 		sample = []
 		start = 0
@@ -413,3 +430,79 @@ Labels need not be unique but must be a hashable type. The object supports both 
 			sample.extend(np.ones(end - start)*np.mean(signal[start:end]))
 		return np.array(sample)
 
+## TIME SERIES FORECAST
+- Resources: https://towardsdatascience.com/time-series-machine-learning-regression-framework-9ea33929009a
+- Naive approach => y_t = y_{t+1}
+- Moving avg
+- Exponential smoothing
+- fitting raw data typically doesn't work out: 
+	-- missing data: can use interpolation to fill missing data
+	```
+	def interpolate_and_plot(prices, interpolation):
+
+    # Create a boolean mask for missing values
+    missing_values = prices.isna()
+
+    # Interpolate the missing values
+    prices_interp = prices.interpolate(interpolation)
+
+    # Plot the results, highlighting the interpolated values in black
+    fig, ax = plt.subplots(figsize=(10, 5))
+    prices_interp.plot(color='k', alpha=.6, ax=ax, legend=False)
+	
+	
+	-- outliers: use rolling average, standardise mean and variance
+	```
+	# Your custom function
+	def percent_change(series):
+		# Collect all *but* the last value of this window, then the final value
+		previous_values = series[:-1]
+		last_value = series[-1]
+
+		# Calculate the % difference between the last value and the mean of earlier values
+		percent_change = (last_value - np.mean(previous_values)) / np.mean(previous_values)
+		return percent_change
+		
+	-- outliers: replace outliers with median values in case the value is < 3 stddev
+	```
+	def replace_outliers(series):
+		# Calculate the absolute difference of each timepoint from the series mean
+		absolute_differences_from_mean = np.abs(series - np.mean(series))
+		
+		# Calculate a mask for the differences that are > 3 standard deviations from zero
+		this_mask = absolute_differences_from_mean > (np.std(series) * 3)
+		
+		# Replace these values with the median accross the data
+		series[this_mask] = np.nanmedian(series)
+		return series
+- Load audio files with Librosa
+	```
+	import librosa as lr
+	from glob import glob
+
+	# List all the wav files in the folder
+	audio_files = glob(data_dir + '/*.wav')
+
+	# Read in the first audio file, create the time array
+	audio, sfreq = lr.load(audio_files[0])
+	time = np.arange(0, len(audio)) / sfreq
+
+	# Plot audio over time
+	fig, ax = plt.subplots()
+	ax.plot(time, audio)
+	ax.set(xlabel='Time (s)', ylabel='Sound Amplitude')
+	plt.show()
+	
+- Spectrogram: Based on FOurier Transform
+	```
+	# Import the functions we'll use for the STFT
+	from librosa.core import stft, amplitude_to_db
+	from librosa.display import specshow
+	# Calculate our STFT
+	HOP_LENGTH = 2**4
+	SIZE_WINDOW = 2**7
+	audio_spec = stft(audio, hop_length=HOP_LENGTH, n_fft=SIZE_WINDOW)
+	# Convert into decibels for visualization
+	spec_db = amplitude_to_db(audio_spec)
+
+- Examples of useful features to represent the time series: max, mean, std, tempo_mean, tempo_max, tempo_std, bandwidth_mean, centroid_mean
