@@ -178,6 +178,25 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	```def money_to_float(money_str):```  
     	```return float(money_str.replace("$","").replace(",",""))```  
 	```df['SAL-RATE'].apply(money_to_float)```
+	
+- Partial: pre-choose arguments for function so that it can be preconfigured before running it
+	```
+	# Import partial from functools
+	from functools import partial 
+	percentiles = [1, 10, 25, 50, 75, 90, 99]
+
+	# Use a list comprehension to create a partial function for each quantile
+	percentile_functions = [partial(np.percentile, q=percentile) for percentile in percentiles]
+
+	# Calculate each of these quantiles on the data using a rolling window
+	prices_perc_rolling = prices_perc.rolling(20, min_periods=5, closed='right')
+
+	features_percentiles = prices_perc_rolling.aggregate(percentile_functions)
+
+	# Plot a subset of the result
+	ax = features_percentiles.loc[:"2011-01"].plot(cmap=plt.cm.viridis)
+	ax.legend(percentiles, loc=(1.01, .5))
+	plt.show()
 
 - Scales:
 	- Ratio
@@ -201,6 +220,14 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	from sklearn.model_selection import cross_val_score
 	percent_score = cross_val_score(model, X, y, cv=5)
 	print(np.mean(percent_score))
+	
+- Datetime features
+	```
+	# Ensure our index is datetime
+	prices.index = pd.to_datetime(prices.index)
+	# Extract datetime features
+	day_of_week_num = prices.index.weekday
+	print(day_of_week_num[:10])
 
 ## MODEL EVALUATION AND SELECTION (SUPERVISED)
 - Generic golden rule: 
