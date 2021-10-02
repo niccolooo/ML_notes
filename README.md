@@ -4,9 +4,15 @@
 
 - **Expected value**: *mean value if an infinite number of samples were drawn from the distribution*. 
 
+ - **Kurtosis**: quantifies how far from the Gaussian distribution a distribution is. It can be quantified using the Pearson coefficient: gamma_2 = m_4 / m_2^2 - 3
+
+If gamma_2 > 0 => distribution is more skewed than a Gaussian
+
 - **R^2** = evaluation metric AKA "coefficient of determination" TODO
 
 - **Skewness**: *measure of the asymmetry of the probability distribution of a real-valued random variable about its mean. The skewness value can be positive or negative, or undefined.*
+
+- ** Statistical Moment**: m_k = sum_0_k [(x-mean)^k p(x)]
 
 - **Stochastic variable**: *variable whose values depend on the outcome of a non-deterministic event. A random variable has a probability distribution which specifies the probability of its values.*  
 
