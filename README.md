@@ -160,11 +160,11 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 
 
-- Train/Test Split: ```
-features = titanic.drop('Survived', axis=1)
-labels = titanic['Survived']
-X_train, X_test, y_train, y_test = train_test_split()
-```
+- Train/Test Split: 
+	```
+	features = titanic.drop('Survived', axis=1)
+	labels = titanic['Survived']
+	X_train, X_test, y_train, y_test = train_test_split()
 
 - Timer:
 	timeit
