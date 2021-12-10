@@ -320,10 +320,19 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	linreg = LinearRegression().fit(X_train, y_train)
 
 ### Logistic Regression
-- Used for binary classification
+- USEFUL IF: 
+	- binary target value
+	- feature importance is crucial
+	- data are well behaved
+
+- TO AVOID IF:
+	- continuous target value
+	- messy data
+	- massive data
+	
 - Computes a real value output based on a linear compbination of the input 
 - logistic function is a non-linear s-shape function y = 1 / ( 1 + e^(-mx - q))
-	'''
+	```
 	x. y = logistic ( w*x + bar)
 	
 ### Decision Tree TODO DESCRIPTION
