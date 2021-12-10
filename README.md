@@ -158,7 +158,13 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 - get type: ```type(my_data)```
 
-- Train/Test Split: ```X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)```
+
+
+- Train/Test Split: ```
+features = titanic.drop('Survived', axis=1)
+labels = titanic['Survived']
+X_train, X_test, y_train, y_test = train_test_split()
+```
 
 - Timer:
 	timeit
