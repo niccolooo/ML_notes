@@ -407,6 +407,11 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	- quick benchmarking
 	- limited data available
 
+- hyperparameters:
+	- activation: function used as perceptron activation. Options: sigmoid (AKA logistic curve), TanH, ReLU (rectified linear unit)
+	- learning rate: 
+	- hidden layer size: 
+
 ### Support Vector Machines (SVM)
 - SVM is a classifier that finds an optimal hyperplan that maximises the margin between two classes
 - useful if:
