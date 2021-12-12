@@ -144,17 +144,26 @@ Labels need not be unique but must be a hashable type. The object supports both 
 ## MISCELLANEOUS
 - Grid Search
 	```
-	dataset = load_digits()
-	X, y = dataset.data, dataset.target == 1
-	X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
-	clf = SVC(kernel='rbf')
-	grid_values = {'gamma': [0.0001, 0.001, 0.01, 0.05, 0.1, 1, 10, 100]}
-	# default metric to optimize over grid parameters: accuracy
-	grid_clf_acc = GridSearchCV(clf, param_grid = grid_values)
-	grid_clf_acc.fit(X_train, y_train)
-	y_decision_fn_scores_acc = grid_clf_acc.decision_function(X_test) 
-	print('Grid best parameter (max. accuracy): ', grid_clf_acc.best_params_)
-	print('Grid best score (accuracy): ', grid_clf_acc.best_score_)
+	
+	def print_results(results):
+	    print('BEST PARAMS: {}\n'.format(results.best_params_))
+
+	    means = results.cv_results_['mean_test_score']
+	    stds = results.cv_results_['std_test_score']
+	    for mean, std, params in zip(means, stds, results.cv_results_['params']):
+		print('{} (+/-{}) for {}'.format(round(mean, 3), round(std * 2, 3), params))
+	
+	
+	from sklearn.model_selection import GridSearchCV
+	lr = LogisticRegression()
+	parameters = {
+	    'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+	}
+
+	cv = GridSearchCV(lr, parameters, cv=5)
+	cv.fit(tr_features, tr_labels.values.ravel())
+
+	print_results(cv)
 
 - get type: ```type(my_data)```
 
@@ -167,6 +176,12 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 	X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size = 0.4, random_state=42)
 	X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, test_size = 0.5, random_state=42)
+
+- Filter warnings
+	```
+	import warnings
+	warnings.filterwarnings('ignore', category=FutureWarning)
+	warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 - Timer:
 	timeit
@@ -299,6 +314,14 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	
 
 ## ALGORITHMS
+
+### Decision Tree TODO DESCRIPTION
+	```
+	from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
+	dt = DecisionTreeClassifier()
+	dt = dt.fit(X_train, y_train)
+	tree.plot_tree(clf.fit(iris.data, iris.target)) 
+
 ### KNN:
 - Parameters
 	1. Distance metric
@@ -320,27 +343,24 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	linreg = LinearRegression().fit(X_train, y_train)
 
 ### Logistic Regression
-- USEFUL IF: 
+- useful if: 
 	- binary target value
 	- feature importance is crucial
 	- data are well behaved
 
-- TO AVOID IF:
+- useful if:
 	- continuous target value
 	- messy data
 	- massive data
+
+- regularization controlled by param C. As C increases, model complexity increases
 	
 - Computes a real value output based on a linear compbination of the input 
 - logistic function is a non-linear s-shape function y = 1 / ( 1 + e^(-mx - q))
 	```
+	from sklearn.linear_model import LogisticRegression 
 	x. y = logistic ( w*x + bar)
-	
-### Decision Tree TODO DESCRIPTION
-	```
-	from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
-	dt = DecisionTreeClassifier()
-	dt = dt.fit(X_train, y_train)
-	tree.plot_tree(clf.fit(iris.data, iris.target)) 
+
 
 ### Naive Bayes Classification
 - Assumes no correlation between features for instances of the same class
@@ -374,7 +394,34 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	from sklearn.ensemble import GradientBoostingClassifier
 	clf = GradientBoostingClassifier().fit(X_train, y_train)
 
-### Support Vector Machines
+### Multilayer Perceptron
+- feed-forward artificial neural network. Black box model. 3 layers: input, hidden, output
+- useful for:
+	- classification and regression
+	- handling complex relationships
+	- not interested in explicability
+	
+- not useful for:
+	- image recognition and time series
+	- transparency and explicability
+	- quick benchmarking
+	- limited data available
+
+### Support Vector Machines (SVM)
+- SVM is a classifier that finds an optimal hyperplan that maximises the margin between two classes
+- useful if:
+	- binary target
+	- high feature-to-row is high
+	- complex relationship
+	- lots of outliers
+
+- not useful if:
+	- low feature-to-row
+	- transparency is important
+	- looking for a quick benchmark
+	
+- hyperparameters:
+	- C: regularization. High value of C => low regularization
 - Linear binary classifier f(x) = sign (Wx + b)
 - Classifier margin: maximum width the the decision boundary can be increased before hitting a data point
 -  SVM is the linear classifier with maximum classifier margin
