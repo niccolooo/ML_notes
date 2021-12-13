@@ -371,11 +371,20 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	plot_class_regions_for_classifier(nbclf, X_train, y_train, X_test, y_test,'Gaussian Naive Bayes classifier: Dataset 2')
 
 ### Random Forests: Ensemble method combining several decision trees.
+- In a nutshell: RF uses a set of decision trees, each of them trained on a subset of the rows and columns of the data. The predicion of each tree is used to feed an ensemble prediction model (e.g. majority voting). 
+- useful for:
+	- classification AND regression
+	- quick benchmarking
+	- messy data, missing values, outliers
+- not useful for:
+	- finding the best model
+	- explicability
+	- super fast prediction time
 - Steps: 
 	1. Bootstrapped randomized copies 
 	2. Randomized feature split
 	3. Ensemble prediction
-- good prediction performances
+
 - easy to parallelize
 - doesn't perform well on high dimensional spaces
 - hard to interpret for humans
