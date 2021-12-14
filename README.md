@@ -29,6 +29,14 @@ If gamma_2 > 0 => distribution is more skewed than a Gaussian
 ## SELECTING AN ESTIMATOR
 https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html
 
+### Latency
+- training time
+- prediction time
+
+### Accuracy
+- Short and fat data vs long and skinny
+- Behaviour in case of messy data
+
 ## TO READ
 1. https://www.coursera.org/learn/python-machine-learning/supplement/EoTru/rules-of-machine-learning-best-practices-for-ml-engineering-optional
 2. 
@@ -311,8 +319,24 @@ Labels need not be unique but must be a hashable type. The object supports both 
 		mean_absolute_error, 
 		mean_squared_error, 
 		median_absolute_error
-	
+		
+### BOOSTING
+- ensemble method to aggregate a number of weak models. A boosting system learns from its mistakes with each iteration.
+- useful for:
+	- classification AND regression
+	- handling most types of problems
+	- interested in significance predictors
+	- fast prediction time
 
+- not useful for:
+	- transparency
+	- speedy training
+	- noisy data
+
+- hyperparameter:
+	- learning_rate: will remain constant
+	- max_depth: max depth of single predictors (it should be quite shallow, shallower wrt to Random Forest)
+	- 
 ## ALGORITHMS
 
 ### Decision Tree TODO DESCRIPTION
@@ -395,7 +419,9 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	clf.fit(X_train, y_train)
 
 ### Gradient Boosted Decision Trees
-- series of weak decision trees 
+- series of weak decision trees. The idea is to select a series of shallow decision trees.
+- TRAINING: train data => model1 => overweight misclassified examples => model2 => overweight misclassified examples => model3
+- TESTING: test data => model1, model2 .. => Weighted vote
 - parameters: n_estimators = # of small decision trees to use in the ensemble, learning_rate = controls emphasis on fixing errors from the previous tree
 - often performs well off-the-shelf
 - hard to interpret
