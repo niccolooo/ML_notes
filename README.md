@@ -150,6 +150,14 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	```empDfObj.info()```
 	
 ## MISCELLANEOUS
+
+- Get numeric and categorical columns
+	```
+	# DEFINE NUMERIC AND CAT COLUMNS
+	numeric_cols = tr_features.select_dtypes('number').columns
+	cat_cols = list(set(tr_features.columns) - set(numeric_cols))
+
+
 - Grid Search
 	```
 	
