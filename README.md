@@ -80,8 +80,12 @@ Labels need not be unique but must be a hashable type. The object supports both 
 
 		
  - **[Pandas] List**: TODO DESCRIPTION
-	- ```my_list = [1, 2, 3]``` 
+
+	- ```my_list = [1, 2, 3]```
+
 	- ```my_list = [1, "Hello", 3.4]``` # list with mixed data types
+
+
 	- ```my_list = ["mouse", [8, 4, 6], ['a']]``` # nested list
 
 - **[Numpy] Array**: TODO DESCRIPTION
