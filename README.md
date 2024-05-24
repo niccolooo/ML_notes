@@ -142,6 +142,15 @@ Labels need not be unique but must be a hashable type. The object supports both 
 	```X_train_scaled = scaler.fit_transform(X_train)```  
 	```X_test_scaled = scaler.transform(X_test)```
 
+- **Multi index**:
+	Generic info: https://www.youtube.com/watch?v=_YesMZLtakA
+  	```df.set_index(['level1', 'level2', 'level3'], inplace = True) # set multiindex```  
+  	```df.loc['mylevel1'] # access specific data ```
+  	```df.loc[('mylevel1', 'mylevel2', 'mylevel3')] # access specific data to the lowest granularity```
+  	```df.unstack() # reshape data with info along the columns```
+  	```df.stack() # stack information as index ```
+  
+
 ## EXPLORATION
 - Get columns whose data type is object i.e. string
 	```filteredColumns = empDfObj.dtypes[empDfObj.dtypes == np.object]```
